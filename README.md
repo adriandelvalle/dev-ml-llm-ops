@@ -18,7 +18,7 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
 
 ##  Project Structure
 
-| Folder | Purpose / Propósito |
+| Folder | Purpose |
 |--------|-------------------|
 | `devops/` | Infrastructure, automation, CI/CD |
 | `mlops/` | ML model lifecycle, training, deployment |
