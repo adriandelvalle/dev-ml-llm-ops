@@ -1,0 +1,68 @@
+# ===========================================
+# Python
+# ===========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+env/
+.env
+*.egg-info/
+dist/
+build/
+
+# ===========================================
+# IDE / Editores
+# ===========================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ===========================================
+# Secrets (¡NUNCA subir esto!)
+# ===========================================
+*.pem
+*.key
+*.crt
+secrets/
+config.local.json
+config.local.yaml
+*.env.local
+credentials.json
+service-account*.json
+
+# ===========================================
+# Modelos y datos grandes 
+# ===========================================
+*.bin
+*.gguf
+*.pt
+*.pth
+*.onnx
+*.h5
+models/
+data/raw/
+*.parquet
+*.feather
+
+# ===========================================
+# Logs y temporales
+# ===========================================
+*.log
+logs/
+tmp/
+temp/
+*.tmp
+*.bak
+
+# ===========================================
+# Docker
+# ===========================================
+*.dockerfile.local
+docker-compose.override.yml
