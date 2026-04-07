@@ -161,6 +161,7 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
 
 | Fase | Semana | Tema | Estado | Notas |
 | :--- | :--- | :--- | :--- | :--- |
+| **0** | Setup | Environment Setup & Hardening | ✅ Done | [Ver](docs/learning/phase0-environment-setup.md) |
 | **1** | 1 | Linux Fundamentals & Security Hardening | ✅ Done | [Ver](docs/learning/phase1-week1-linux-fundamentals.md) |
 | **1** | 2 | AI Local Workflow & FastAPI Scaffold | ✅ Done | [Ver](docs/learning/phase1-week2-opencode-fastapi.md) |
 | **1** | 3 | Pydantic Validation & Mock Data | ⏳ Pending | - |
