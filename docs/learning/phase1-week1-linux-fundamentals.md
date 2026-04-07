@@ -7,10 +7,12 @@
 Linux (FHS, permisos, procesos) aplicado a un proyecto real, no en abstracto.
 
 ## Estructura creada
+```
 brewery-app/
 ├── backend/src/{api,core,models}/    # Código FastAPI futuro
 ├── docs/decisions/                   # ADRs del proyecto
 └── scripts/                          # Herramientas de automatización
+```
 
 ## Conceptos aprendidos
 
