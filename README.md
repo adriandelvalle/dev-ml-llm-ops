@@ -96,7 +96,7 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
 
   
 
-### Phase 1: Foundations 🔄 In Progress (Week 1/4 completed)
+### Phase 1: Foundations 🔄 In Progress (Week 2/4 completed)
 
 - [x] Linux fundamentals applied: FHS, permissions (700/644/755), processes
 
