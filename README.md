@@ -108,9 +108,9 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
 
 - [x] Reference documentation: Git cheatsheet in `docs/reference/`
 
-- [ ] OpenCode CLI + Web UI deployment (Week 2)
+- [x] OpenCode CLI + Web UI deployment (Week 2)
 
-- [ ] FastAPI backend scaffold with /health endpoint (Week 2)
+- [x] FastAPI backend scaffold with /health endpoint (Week 2)
 
   
 
@@ -219,7 +219,7 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
 | Fase | Semana | Tema | Notas |
 | :--- | :--- | :--- | :--- |
 | 1 | 1 | Linux Fundamentals Applied | [Ver](docs/learning/phase1-week1-linux-fundamentals.md) |
-
+| 1 | 2 | OpenCode + FastAPI Scaffold | [Ver](docs/learning/phase1-week2-opencode-fastapi.md) |
   
 
 ### Reference Cheatsheets
