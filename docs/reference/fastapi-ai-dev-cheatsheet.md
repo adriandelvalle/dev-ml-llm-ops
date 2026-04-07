@@ -19,6 +19,14 @@ Quick reference for local AI-assisted Python backend development.
 | Swagger UI | `http://localhost:8000/docs` |
 | ReDoc | `http://localhost:8000/redoc` |
 
+## Port Forwarding & Acceso Remoto
+| Escenario | Solución |
+| :--- | :--- |
+| VS Code cerrado | Reabrir VS Code → pestaña PORTS → restaurar 8000 |
+| Sin VS Code | `ssh -L 8000:localhost:8000 jota@<server-ip>` |
+| Acceso directo (red segura) | `http://<server-ip>:8000/docs` |
+| API caída tras reinicio | Usar `systemd` o Docker `restart: always` (Semana 4) |
+
 ## OpenCode + Ollama
 | Task | Prompt / Command |
 | :--- | :--- |
