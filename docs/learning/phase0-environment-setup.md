@@ -104,12 +104,24 @@ sudo systemctl enable --now fail2ban
 # See: brewery-app/scripts/audit-permissions.sh
 ```
 
+### ✅ Execution & Verification Log
+| Date       | Action                  | Status   | Verified By          |
+|------------|-------------------------|----------|----------------------|
+| 2026-04-07 | UFW + fail2ban applied  | ✅ Live  | `jota@jotasrv`       |
+| 2026-04-07 | Firewall & jail rules   | ✅ Active| `ufw status` + `systemctl is-active` |
+
+
+---
+
 ## Verification Checklist
 - ssh jota@192.168.0.21 connects without password
 - git commit uses correct name/email
 - VS Code Remote SSH shows server filesystem
 - sudo ufw status shows firewall active
 - htop shows system resources correctly
+
+
+---
 
 ## Troubleshooting
 | Issue | Solution |
