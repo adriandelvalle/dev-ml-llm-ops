@@ -39,21 +39,14 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
   
 
 | Folder | Purpose |
-
-|--------|-------------------|
-
+|:---|:---|
 | `devops/` | Infrastructure, automation, CI/CD sandbox exercises |
-
 | `mlops/` | ML model lifecycle, training, deployment sandbox |
-
 | `llmops/` | Local LLMs, RAG, inference sandbox experiments |
-
 | `docs/learning/` | Chronological learning notes (by phase/week) |
-
 | `docs/reference/` | Reusable cheatsheets (Git, Docker, K8s, etc.) |
 
   
-
 > **Note**: Deep technical documentation inside each folder is in Spanish.
 
   
@@ -67,31 +60,18 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
   
 
 | Component | Technology |
-
-|-----------|-----------|
-
+|:---|:---|
 | **Hardware** | ACEMAGIC Mini PC (Ryzen 7 6800H, Radeon 680M, 32GB RAM) |
-
 | **OS** | Linux (Ubuntu) |
-
 | **Remote Access** | VS Code Remote SSH | mRemote SSH
-
 | **Version Control** | Git + GitHub (SSH) |
-
 | **AI Tools** | OpenCode CLI + Ollama + Qwen (local, 100% free) |
-
 | **Backend** | FastAPI (planned), PostgreSQL (planned) |
-
 | **Infrastructure** | Docker, Docker Compose, Kubernetes (planned) |
-
 | **CI/CD** | GitHub Actions, Terraform, Ansible (planned) |
-
 | **MLOps** | MLflow, Great Expectations (planned) |
-
 | **LLMOps** | LangChain, RAG (Chroma/FAISS), Agentes (planned) |
-
 | **Monitoring** | Prometheus + Grafana (planned) |
-
 | **Security** | Trivy, UFW, fail2ban (planned) |
 
   
@@ -207,9 +187,7 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
   
 
 | Estado | Stack | Propósito |
-
-|--------|-------|-----------|
-
+| :--- | :--- | :--- |
 | 🟡 Fase 1 (scaffold) | FastAPI, PostgreSQL, Docker (próximamente) | Vehículo de aprendizaje para DevOps/MLOps/LLMOps |
 
   
@@ -239,9 +217,7 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
 ### Learning Notes (Chronological)
 
 | Fase | Semana | Tema | Notas |
-
-|------|--------|------|-------|
-
+| :--- | :--- | :--- | :--- |
 | 1 | 1 | Linux Fundamentals Applied | [Ver](docs/learning/phase1-week1-linux-fundamentals.md) |
 
   
@@ -249,9 +225,7 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
 ### Reference Cheatsheets
 
 | Área | Cheatsheet |
-
-|------|-----------|
-
+| :--- | :--- |
 | Git | [git-cheatsheet.md](docs/reference/git-cheatsheet.md) |
 
   
@@ -259,13 +233,9 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
 ### Project Documentation
 
 | Document | Language | Purpose |
-
-|----------|----------|---------|
-
+| :--- | :--- | :--- |
 | `brewery-app/README.md` | English | Technical docs for the brewery app |
-
 | `brewery-app/docs/decisions/` | English | Architecture Decision Records (ADRs) |
-
 | `portfolio/docs/*.md` | Español | Deep technical notes for learning |
 
   
