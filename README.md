@@ -1,4 +1,4 @@
-My DevOps • MLOps • LLMOps Journey
+# My DevOps • MLOps • LLMOps Journey
 
 
 
@@ -36,141 +36,84 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
 
 ## Project Structure
 
-  
-
 | Folder | Purpose |
 |:---|:---|
-| `devops/` | Infrastructure, automation, CI/CD sandbox exercises |
-| `mlops/` | ML model lifecycle, training, deployment sandbox |
-| `llmops/` | Local LLMs, RAG, inference sandbox experiments |
-| `docs/learning/` | Chronological learning notes (by phase/week) |
-| `docs/reference/` | Reusable cheatsheets (Git, Docker, K8s, etc.) |
+| `projects/brewery-app/` | Core application: FastAPI backend, AI integration, infra configs & ADRs |
+| `/projects/portfolio/docs/learning/` | Chronological learning notes (by phase/week) |
+| `/projects/portfolio/docs/reference/` | Reusable cheatsheets, architecture decisions & runbooks |
+| `/projects/portfolio/"sandbox-folders"/` | Isolated experiments: `devops/`, `mlops/`, `llmops/` |
 
-  
 > **Note**: Deep technical documentation inside each folder is in Spanish.
 
-  
-
 ---
-
-  
 
 ## Tech Stack
 
-  
-
-| Component | Technology |
-|:---|:---|
-| **Hardware** | ACEMAGIC Mini PC (Ryzen 7 6800H, Radeon 680M, 32GB RAM) |
-| **OS** | Linux (Ubuntu) |
-| **Remote Access** | VS Code Remote SSH | mRemote SSH
-| **Version Control** | Git + GitHub (SSH) |
-| **AI Tools** | OpenCode CLI + Ollama + Qwen (local, 100% free) |
-| **Backend** | FastAPI (planned), PostgreSQL (planned) |
-| **Infrastructure** | Docker, Docker Compose, Kubernetes (planned) |
-| **CI/CD** | GitHub Actions, Terraform, Ansible (planned) |
-| **MLOps** | MLflow, Great Expectations (planned) |
-| **LLMOps** | LangChain, RAG (Chroma/FAISS), Agentes (planned) |
-| **Monitoring** | Prometheus + Grafana (planned) |
-| **Security** | Trivy, UFW, fail2ban (planned) |
-
-  
+| Component | Technology | Status |
+|:---|:---|:---|
+| **Hardware** | ACEMAGIC Mini PC (Ryzen 7 6800H, Radeon 680M, 32GB RAM) | ✅ Active |
+| **OS / Access** | Ubuntu 24.04 LTS + VS Code Remote SSH / mRemoteNG | ✅ Active |
+| **Version Control** | Git + GitHub (SSH) + Conventional Commits | ✅ Active |
+| **AI Coding** | OpenCode CLI + Ollama + Qwen3:8b (100% local) | ✅ Active |
+| **Backend** | FastAPI + Uvicorn + Pydantic | ✅ Implemented (v0.1) |
+| **Database** | PostgreSQL + SQLAlchemy | ⏳ Planned (Week 3) |
+| **Object Storage** | MinIO (S3-compatible API) | ⏳ Planned (Week 6) |
+| **Secrets Mgmt** | HashiCorp Vault + Vaultwarden (team passwords) | ⏳ Planned (Week 7) |
+| **Virtualization** | Proxmox VE | ⏳ Planned (Week 9) |
+| **Orchestration** | Docker Compose → k3s (Kubernetes) | ⏳ Planned (Weeks 5-9) |
+| **CI/CD** | GitHub Actions | ⏳ Planned (Week 8) |
+| **Observability** | Prometheus + Grafana + Loki | ⏳ Planned (Week 11) |
+| **Security** | UFW, fail2ban, Trivy, Vault policies | 🔄 In Progress |
 
 ---
 
-  
-
 ## Learning Progress
 
-  
+### Phase 0: Environment Setup ✅ Completed
+- [x] Remote server setup via SSH & hardening
+- [x] Git configuration with GitHub keys & Conventional Commits
+- [x] VS Code Remote SSH workflow & port forwarding
+- [x] Portfolio & `brewery-app` repository structure
 
-### Phase 0: Setup ✅ Completed
+### Phase 1: Foundations 🟢 Completed (Week 2/4)
+- [x] Linux fundamentals: FHS, permissions, processes, networking
+- [x] Security baseline: `audit-permissions.sh`, UFW, fail2ban config
+- [x] AI Local Workflow: OpenCode CLI + Ollama + Qwen3:8b integration
+- [x] Backend Scaffold: FastAPI `/health` endpoint + Swagger UI
+- [x] Python Environment: `venv` isolation + PEP 668 compliance
+- [x] Documentation: Cheatsheet, ADR-0001 (AI Tooling), ADR-0002 (Infra Stack)
+- [ ] Pydantic models & mock data (Week 3)
+- [ ] Docker basics & containerization (Week 4)
 
-- [x] Remote server setup via SSH
+### Phase 2: IaC, Storage & Secrets ⏳ Planned (Weeks 5-8)
+- [ ] Docker fundamentals: images, containers, multi-stage builds
+- [ ] Docker Compose: multi-service orchestration (API + DB + MinIO)
+- [ ] MinIO setup: S3-compatible storage for models & artifacts
+- [ ] HashiCorp Vault: secrets management & dynamic credentials
+- [ ] CI/CD pipeline: GitHub Actions (lint, test, build, push)
 
-- [x] Git configuration with GitHub keys
-
-- [x] VS Code Remote SSH workflow
-
-- [x] Portfolio repository structure
-
-  
-
-### Phase 1: Foundations 🔄 In Progress (Week 2/4 completed)
-
-- [x] Linux fundamentals applied: FHS, permissions (700/644/755), processes
-
-- [x] Project scaffold: `brewery-app/` structure with backend/, docs/, scripts/
-
-- [x] Security script: `audit-permissions.sh` for automated permission checks
-
-- [x] Git conventions: Conventional Commits, branch naming, remote sync
-
-- [x] Reference documentation: Git cheatsheet in `docs/reference/`
-
-- [x] OpenCode CLI + Web UI deployment (Week 2)
-
-- [x] FastAPI backend scaffold with /health endpoint (Week 2)
-
-  
-
-### Phase 2: Docker + Kubernetes ⏳ Planned
-
-- [ ] Docker fundamentals: images, containers, Dockerfile, multi-stage builds
-
-- [ ] Docker Compose: multi-service orchestration for local development
-
-- [ ] Kubernetes basics with k3s: pods, deployments, services, ingress
-
-- [ ] Deploy brewery-app backend in k3s with resource limits
-
-  
-
-### Phase 3: CI/CD + IaC ⏳ Planned
-
-- [ ] GitHub Actions: lint, test, build workflows
-
-- [ ] Terraform basics: infrastructure as code for server provisioning
-
-- [ ] Ansible: configuration management for ACEMAGIC setup
-
-- [ ] GitOps concepts with ArgoCD (optional)
-
-  
+### Phase 3: Orchestration & Observability ⏳ Planned (Weeks 9-12)
+- [ ] Proxmox VE: VM/LXC provisioning for isolated labs
+- [ ] Kubernetes (k3s): pods, deployments, services, ingress
+- [ ] Helm charts & GitOps basics
+- [ ] Observability stack: Prometheus + Grafana dashboards
+- [ ] Backup & DR: MinIO replication + Vault snapshots
 
 ### Phase 4: MLOps Fundamentals ⏳ Planned
-
-- [ ] Reproducible environments: venv, requirements, Docker for ML
-
-- [ ] Experiment tracking with MLflow
-
+- [ ] Reproducible environments & experiment tracking (MLflow)
 - [ ] Data validation with Great Expectations
-
-- [ ] Model serving with FastAPI + monitoring basics
-
-  
+- [ ] Model serving, monitoring & drift detection
 
 ### Phase 5: LLMOps Specialization ⏳ Planned
+- [ ] RAG pipeline: embeddings, vector DB (Chroma/FAISS), retrieval
+- [ ] Orchestration: LangChain/LlamaIndex
+- [ ] Multi-agent systems (AutoGen/CrewAI)
+- [ ] Evaluation frameworks: DeepEval, Ragas
 
-- [ ] Local LLMs with Ollama: model selection, quantization, performance tuning
-
-- [ ] RAG fundamentals: embeddings, vector stores (Chroma/FAISS), retrieval
-
-- [ ] LangChain/LlamaIndex for orchestration
-
-- [ ] Agentes (AutoGen/CrewAI) for multi-step tasks
-
-- [ ] Evaluation of LLM outputs with DeepEval/Ragas
-
-  
-
-### Phase 6: Integration Project ⏳ Planned
-
-- [ ] brewery-app v1.0: production-like deployment with all components
-
-- [ ] Documentation, testing, security hardening
-
-- [ ] Portfolio polish: README, demo, LinkedIn post
+### Phase 6: Integration & Production Readiness ⏳ Planned
+- [ ] `brewery-app` v1.0: full stack deployment on k3s
+- [ ] Security hardening, load testing, & documentation
+- [ ] Portfolio polish: live demo, case study, & LinkedIn article
 
   
 
@@ -216,19 +159,24 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
 
 ### Learning Notes (Chronological)
 
-| Fase | Semana | Tema | Notas |
-| :--- | :--- | :--- | :--- |
-| 1 | 1 | Linux Fundamentals Applied | [Ver](docs/learning/phase1-week1-linux-fundamentals.md) |
-| 1 | 2 | OpenCode + FastAPI Scaffold | [Ver](docs/learning/phase1-week2-opencode-fastapi.md) |
-  
+| Fase | Semana | Tema | Estado | Notas |
+| :--- | :--- | :--- | :--- | :--- |
+| **1** | 1 | Linux Fundamentals & Security Hardening | ✅ Done | [Ver](docs/learning/phase1-week1-linux-fundamentals.md) |
+| **1** | 2 | AI Local Workflow & FastAPI Scaffold | ✅ Done | [Ver](docs/learning/phase1-week2-opencode-fastapi.md) |
+| **1** | 3 | Pydantic Validation & Mock Data | ⏳ Pending | - |
+| **1** | 4 | Docker Fundamentals & Containerization | ⏳ Pending | - |
+| **2** | 5-8 | IaC, MinIO Storage & HashiCorp Vault | ⏳ Planned | - |
+| **3** | 9-12 | Kubernetes (k3s) & Observability | ⏳ Planned | - |
 
-### Reference Cheatsheets
+---
 
-| Área | Cheatsheet |
-| :--- | :--- |
-| Git | [git-cheatsheet.md](docs/reference/git-cheatsheet.md) |
+### Reference Cheatsheets & Docs
 
-  
+| Área | Documento | Descripción |
+| :--- | :--- | :--- |
+| Git | [git-cheatsheet.md](docs/reference/git-cheatsheet.md) | Commits, branching, remote sync & conventional patterns |
+| FastAPI + AI | [fastapi-ai-dev-cheatsheet.md](docs/reference/fastapi-ai-dev-cheatsheet.md) | venv, uvicorn, OpenCode prompts & project layout |
+| Architecture | [ADR Index](https://github.com/adriandelvalle/brewery-app/tree/main/docs/decisions) | Decision records: AI Tooling & Infra Stack |
 
 ### Project Documentation
 
