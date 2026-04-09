@@ -40,7 +40,7 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
 | **Version Control** | Git + GitHub (SSH) + Conventional Commits | ✅ Active |
 | **AI Coding** | OpenCode CLI (OpenRouter free tier) + Ollama (local, batch/experiments) | ✅ Hybrid — [see ADR-0003](https://github.com/adriandelvalle/brewery-app/blob/main/docs/decisions/0003-ai-strategy.md) |
 | **Backend** | FastAPI + Uvicorn + Pydantic | ✅ Implemented (v0.1) |
-| **Secrets (pre-Vault)** | python-dotenv + `.env` (gitignored, 600) + `.env.example` | ⏳ Week 3 — see [see ADR-0004](https://github.com/adriandelvalle/brewery-app/blob/main/docs/decisions/0004-database-orm-migrations.md) |
+| **Secrets (pre-Vault)** | python-dotenv + `.env` (gitignored, 600) + `.env.example` | ⏳ Week 3 —  [see ADR-0004](https://github.com/adriandelvalle/brewery-app/blob/main/docs/decisions/0004-database-orm-migrations.md) |
 | **Database** | PostgreSQL + SQLAlchemy 2 (async) + Alembic | ⏳ Planned (Week 3) |
 | **Object Storage** | MinIO (S3-compatible API) | ⏳ Planned (Week 6) |
 | **Secrets Mgmt** | HashiCorp Vault + Vaultwarden (team passwords) | ⏳ Planned (Week 7) |
