@@ -38,9 +38,9 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
 | **Hardware** | ACEMAGIC Mini PC (Ryzen 7 6800H, Radeon 680M iGPU, 32GB RAM DDR5) | ✅ Active |
 | **OS / Access** | Ubuntu 24.04 LTS + VS Code Remote SSH / mRemoteNG | ✅ Active |
 | **Version Control** | Git + GitHub (SSH) + Conventional Commits | ✅ Active |
-| **AI Coding** | OpenCode CLI (OpenRouter free tier) + Ollama (local, batch/experiments) | ✅ Hybrid — see ADR-0003 |
+| **AI Coding** | OpenCode CLI (OpenRouter free tier) + Ollama (local, batch/experiments) | ✅ Hybrid — [see ADR-0003](https://github.com/adriandelvalle/brewery-app/blob/main/docs/decisions/0003-ai-strategy.md) |
 | **Backend** | FastAPI + Uvicorn + Pydantic | ✅ Implemented (v0.1) |
-| **Secrets (pre-Vault)** | python-dotenv + `.env` (gitignored, 600) + `.env.example` | ⏳ Week 3 — see ADR-0004 |
+| **Secrets (pre-Vault)** | python-dotenv + `.env` (gitignored, 600) + `.env.example` | ⏳ Week 3 — see [see ADR-0004](https://github.com/adriandelvalle/brewery-app/blob/main/docs/decisions/0004-database-orm-migrations.md) |
 | **Database** | PostgreSQL + SQLAlchemy 2 (async) + Alembic | ⏳ Planned (Week 3) |
 | **Object Storage** | MinIO (S3-compatible API) | ⏳ Planned (Week 6) |
 | **Secrets Mgmt** | HashiCorp Vault + Vaultwarden (team passwords) | ⏳ Planned (Week 7) |
@@ -225,7 +225,7 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 | **AI Tooling** | OpenCode CLI free tier) | ✅ Ready | `opencode` → user selects model at runtime |
 | **Project Root** | `~/projects/brewery-app` | ✅ Structured | `ls -la` shows `backend/`, `docs/`, `scripts/` |
 | **Python Env** | `backend/venv/` (FastAPI + Uvicorn + Pydantic v2) | ✅ Active | `source backend/venv/bin/activate` |
-| **AI Strategy** | Hybrid: Cloud-first for dev, local for batch/MLOps experiments | ✅ Documented | See `docs/decisions/0003-ai-strategy.md` |
+| **AI Strategy** | Hybrid: Cloud-first for dev, local for batch/MLOps experiments | ✅ Documented | See [docs/decisions/0003-ai-strategy.md](https://github.com/adriandelvalle/brewery-app/blob/main/docs/decisions/0003-ai-strategy.md) |
 
 ---
 
