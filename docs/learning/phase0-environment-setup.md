@@ -113,12 +113,49 @@ sudo systemctl enable --now fail2ban
 
 ---
 
+## Environment Status
+
+| Component | Configuration | Status | Verification Command |
+|-----------|---------------|--------|---------------------|
+| **Host** | `jotasrv` (ACEMAGIC Mini PC) | ✅ Active | `hostname` |
+| **Network Interface** | `eno1` (confirmed, not eth0) | ✅ Detected | `ip link show` |
+| **Static IP** | `192.168.0.21/24` | ✅ Configured | `ip -4 addr show eno1` |
+| **SSH Access** | `ssh jota@jotasrv` or `ssh jota@192.168.0.21` | ✅ Working | Key-based auth, no password prompt |
+| **SMB Mount** | `/mnt/Win_Projects` ← `//192.168.0.10/JotaSrv` | ✅ Mounted | `df -h /mnt/Win_Projects` |
+| **Mount Persistence** | `/etc/fstab` entry (CIFS v3.0, creds in `/root/.smbcredentials`) | ✅ Persistent | `grep Win_Projects /etc/fstab` |
+
+
+### Notes on Current Setup
+- **Network**: Interface confirmed as `eno1`. Static IP `192.168.0.21` is operational and reachable from local network.
+- **SMB Mount**: Configured via `/etc/fstab` with credentials stored in `/root/.smbcredentials` (permissions 600). Auto-mounts on boot.
+
+### Quick Verification Commands
+```bash
+# Network & Host
+hostname && ip -4 addr show eno1 | grep inet
+
+# SMB Mount
+df -h /mnt/Win_Projects && grep Win_Projects /etc/fstab
+
+
+# Project Structure
+ls -la ~/projects/brewery-app/ | head -n 10
+
+# Python Env
+source ~/projects/brewery-app/backend/venv/bin/activate && pip list | grep -E "fastapi|uvicorn|pydantic"
+```
+---
+
+
 ## Verification Checklist
 - ssh jota@192.168.0.21 connects without password
 - git commit uses correct name/email
 - VS Code Remote SSH shows server filesystem
 - sudo ufw status shows firewall active
 - htop shows system resources correctly
+- df -h /mnt/Win_Projects shows mounted share
+- grep Win_Projects /etc/fstab confirms persistence
+
 
 
 ---
@@ -129,4 +166,5 @@ sudo systemctl enable --now fail2ban
 | **SSH key rejected** | Check permissions: `chmod 700 ~/.ssh, chmod 600 ~/.ssh/authorized_keys` |
 | **Port forwarding not working** | VS Code → Ports tab → right-click → "Change Local Port" or restart tunnel |
 | **Git push asks for password** | Ensure SSH key is loaded: `ssh-add -l` or use `git remote set-url origin git@github.com:...` |
+| **SMB mount fails on boot** | Verify: `/root/.smbcredentials` permissions (600) and network availability  |
 

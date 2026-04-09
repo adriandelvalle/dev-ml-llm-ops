@@ -54,7 +54,7 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
 | **Hardware** | ACEMAGIC Mini PC (Ryzen 7 6800H, Radeon 680M, 32GB RAM) | ✅ Active |
 | **OS / Access** | Ubuntu 24.04 LTS + VS Code Remote SSH / mRemoteNG | ✅ Active |
 | **Version Control** | Git + GitHub (SSH) + Conventional Commits | ✅ Active |
-| **AI Coding** | OpenCode CLI + Ollama + Qwen3:8b (100% local) | ✅ Active |
+| **AI Coding** | OpenCode CLI free tier • Ollama (local, batch/experiments) | ✅ Hybrid Strategy |
 | **Backend** | FastAPI + Uvicorn + Pydantic | ✅ Implemented (v0.1) |
 | **Database** | PostgreSQL + SQLAlchemy | ⏳ Planned (Week 3) |
 | **Object Storage** | MinIO (S3-compatible API) | ⏳ Planned (Week 6) |
@@ -81,7 +81,7 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
 - [x] AI Local Workflow: OpenCode CLI + Ollama + Qwen3:8b integration
 - [x] Backend Scaffold: FastAPI `/health` endpoint + Swagger UI
 - [x] Python Environment: `venv` isolation + PEP 668 compliance
-- [x] Documentation: Cheatsheet, ADR-0001 (AI Tooling), ADR-0002 (Infra Stack)
+- [x] Documentation: Cheatsheet, ADR-0001, ADR-0002, ADR-0003
 - [ ] Pydantic models & mock data (Week 3)
 - [ ] Docker basics & containerization (Week 4)
 
@@ -177,7 +177,7 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
 | :--- | :--- | :--- |
 | Git | [git-cheatsheet.md](docs/reference/git-cheatsheet.md) | Commits, branching, remote sync & conventional patterns |
 | FastAPI + AI | [fastapi-ai-dev-cheatsheet.md](docs/reference/fastapi-ai-dev-cheatsheet.md) | venv, uvicorn, OpenCode prompts & project layout |
-| Architecture | [ADR Index](https://github.com/adriandelvalle/brewery-app/tree/main/docs/decisions) | Decision records: AI Tooling & Infra Stack |
+| Architecture | [ADR Index](https://github.com/adriandelvalle/brewery-app/tree/main/docs/decisions) | Decision records |
 
 ### Project Documentation
 
@@ -188,6 +188,64 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
 | `portfolio/docs/*.md` | Español | Deep technical notes for learning |
 
   
+
+---
+
+
+## Current Environment Status (Verified 2026-04-08)
+
+| Component | Configuration | Status | Verification Command |
+|-----------|---------------|--------|---------------------|
+| **Host** | `jotasrv` (ACEMAGIC Mini PC) | ✅ Active | `hostname` |
+| **Network Interface** | `eno1` (confirmed, not eth0) | ✅ Detected | `ip link show` |
+| **Static IP** | `192.168.0.21/24` | ✅ Configured | `ip -4 addr show eno1` |
+| **SSH Access** | `ssh jota@jotasrv` or `ssh jota@192.168.0.21` | ✅ Working | Key-based auth, no password prompt |
+| **SMB Mount** | `/mnt/Win_Projects` ← `//192.168.0.10/JotaSrv` | ✅ Mounted | `df -h /mnt/Win_Projects` |
+| **Mount Persistence** | `/etc/fstab` entry (CIFS v3.0, creds in `/root/.smbcredentials`) | ✅ Persistent | `grep Win_Projects /etc/fstab` |
+| **AI Tooling** | OpenCode CLI + OpenRouter (free tier) | ✅ Ready | `opencode` → user selects model at runtime |
+| **Project Root** | `~/projects/brewery-app` | ✅ Structured | `ls -la` shows `backend/`, `docs/`, `scripts/` |
+| **Python Env** | `backend/venv/` (FastAPI + Uvicorn + Pydantic v2) | ✅ Active | `source backend/venv/bin/activate` |
+| **AI Strategy** | Hybrid: Cloud-first for dev, local for batch/MLOps experiments | ✅ Documented | See `docs/decisions/0003-ai-strategy.md` |
+
+### Notes on Current Setup
+- **Network**: Interface confirmed as `eno1`. Static IP `192.168.0.21` is operational and reachable from local network.
+- **SMB Mount**: Configured via `/etc/fstab` with credentials stored in `/root/.smbcredentials` (permissions 600). Auto-mounts on boot.
+- **AI/Dev Workflow**: OpenCode CLI runs in terminal; model selection happens interactively from free tier. No hardcoded model in config to allow flexibility.
+- **Next Step**: Week 3 - Pydantic models & validated endpoints for `brewery-app`.
+
+### Quick Verification Commands
+```bash
+# Network & Host
+hostname && ip -4 addr show eno1 | grep inet
+
+# SMB Mount
+df -h /mnt/Win_Projects && grep Win_Projects /etc/fstab
+
+# AI Tooling
+cd ~/projects/brewery-app && opencode --version 2>/dev/null || echo "OpenCode ready"
+
+# Project Structure
+ls -la ~/projects/brewery-app/ | head -n 10
+
+# Python Env
+source ~/projects/brewery-app/backend/venv/bin/activate && pip list | grep -E "fastapi|uvicorn|pydantic"
+```
+
+
+---
+
+
+## Verification Checklist
+
+- ssh jota@192.168.0.21 connects without password
+- git commit uses correct name/email
+- VS Code Remote SSH shows server filesystem
+- sudo ufw status shows firewall active
+- htop shows system resources correctly
+- df -h /mnt/Win_Projects shows mounted share
+- grep Win_Projects /etc/fstab confirms persistence
+- opencode launches and connects
+
 
 ---
 
@@ -213,6 +271,6 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
 
   
 
-> *Last updated: 2026-04-06*
+> *Last updated:  2026-04-08*
 
 > *Philosophy: Learning-first. 100% free stack. Depth > speed.*
