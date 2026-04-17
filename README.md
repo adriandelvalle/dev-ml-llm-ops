@@ -38,13 +38,13 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
 | **Hardware** | ACEMAGIC Mini PC (Ryzen 7 6800H, Radeon 680M iGPU, 32GB RAM DDR5) | ✅ Active |
 | **OS / Access** | Ubuntu 24.04 LTS + VS Code Remote SSH / mRemoteNG | ✅ Active |
 | **Version Control** | Git + GitHub (SSH) + Conventional Commits | ✅ Active |
+| **Code Quality** | pre-commit + commitizen (both repos) | ✅ Active |
 | **AI Coding** | OpenCode CLI (OpenRouter free tier) + Ollama (local, batch/experiments) | ✅ Hybrid — see ADR-0003 |
-| **Backend** | FastAPI + Uvicorn + Pydantic v2 | ✅ Implemented (v0.1) |
+| **Backend** | FastAPI + Uvicorn + Pydantic v2 | ✅ Implemented |
 | **API Models** | Pydantic v2 — Recipe, Batch, FermentationSample | ✅ Implemented |
-| **Secrets (pre-Vault)** | python-dotenv + `.env` (gitignored, 600) + `.env.example` | ⏳ Week 5 — see [ADR-0004](https://github.com/adriandelvalle/brewery-app/blob/main/docs/decisions/0004-database-orm-migrations.md)|
+| **Testing** | pytest + httpx + pytest-asyncio (14 tests) | ✅ Implemented |
+| **Secrets (pre-Vault)** | python-dotenv + `.env` (gitignored, 600) + `.env.example` | ⏳ Week 5 — see ADR-0004 |
 | **Database** | PostgreSQL + SQLAlchemy 2 (async) + Alembic | ⏳ Planned (Week 5) |
-| **Testing** | pytest + httpx | ⏳ Pending (Week 3) |
-| **Pre-commit** | pre-commit + commitizen | ⏳ Pending (Week 3) |
 | **Object Storage** | MinIO (S3-compatible API) | ⏳ Planned (Week 6) |
 | **Secrets Mgmt** | HashiCorp Vault + Vaultwarden | ⏳ Planned (Week 7) |
 | **Virtualization** | Proxmox VE | ⏳ Planned (Week 9) |
@@ -74,7 +74,7 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 - [x] VS Code Remote SSH workflow & port forwarding
 - [x] Portfolio & `brewery-app` repository structure
 
-### Phase 1: Foundations 🔄 In Progress (Week 3/4)
+### Phase 1: Foundations ✅ Completed (Week 3/4)
 
 - [x] Linux fundamentals: FHS, permissions, processes, networking
 - [x] Security baseline: `audit-permissions.sh`, UFW, fail2ban config
@@ -85,17 +85,22 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 - [x] Pydantic models: Recipe, Batch, FermentationSample (Week 3)
 - [x] API v1 endpoints: GET/POST recipes and batches (Week 3)
 - [x] Professional src structure: api/, models/, core/ (Week 3)
-- [ ] pytest + httpx: first unit tests (Week 3)
-- [ ] pre-commit + commitizen (Week 3)
+- [x] pytest + httpx: 14 tests with fixtures and state isolation (Week 3)
+- [x] pre-commit + commitizen: enforced on both repos (Week 3)
 - [ ] Docker basics & containerization (Week 4)
 
-### Phase 2: IaC, Storage & Secrets ⏳ Planned (Weeks 5–8)
+### Phase 2: IaC, Storage & Secrets ⏳ Planned (Weeks 4–8)
+
+**Week 4 — Docker**
+- [ ] Docker fundamentals: images, containers, layers, Dockerfile
+- [ ] Containerize FastAPI app
+- [ ] Service persistence via Docker restart policy
 
 **Week 5 — Data Layer**
 - [ ] PostgreSQL setup + Docker Compose
 - [ ] SQLAlchemy 2 async models
 - [ ] Alembic: first migration
-- [ ] python-dotenv + `.env.example` — pre-Vault secrets pattern ([ADR-0004](https://github.com/adriandelvalle/brewery-app/blob/main/docs/decisions/0004-database-orm-migrations.md))
+- [ ] python-dotenv + `.env.example` — pre-Vault secrets pattern (ADR-0004)
 
 **Week 6 — Storage**
 - [ ] Docker Compose: multi-service orchestration (API + DB + MinIO)
@@ -103,7 +108,7 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 
 **Week 7 — Secrets**
 - [ ] HashiCorp Vault: secrets management & dynamic DB credentials
-- [ ] Migrate `DATABASE_URL` from `.env` to Vault (see [ADR-0004](https://github.com/adriandelvalle/brewery-app/blob/main/docs/decisions/0004-database-orm-migrations.md))
+- [ ] Migrate `DATABASE_URL` from `.env` to Vault (see ADR-0004)
 
 **Week 8 — CI/CD**
 - [ ] GitHub Actions pipeline: lint, test, build, push
@@ -167,13 +172,14 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 
 | Estado | Stack | Propósito |
 | --- | --- | --- |
-| 🔄 Fase 1 (Week 3) | FastAPI + Pydantic, PostgreSQL (próximo), Docker (próximo) | Vehículo de aprendizaje para DevOps/MLOps/LLMOps |
+| 🔄 Fase 1 — Week 4 next | FastAPI + Pydantic + pytest, Docker (próximo) | Vehículo de aprendizaje para DevOps/MLOps/LLMOps |
 
 **Roadmap de features**:
 
 - [x] API scaffold + health endpoint
 - [x] Recipe & Batch management API (mock data)
-- [ ] Tests + pre-commit (Semana 3)
+- [x] pytest suite — 14 tests
+- [x] pre-commit + commitizen
 - [ ] Containerización Docker (Semana 4)
 - [ ] Inventario con PostgreSQL (Semana 5)
 - [ ] Auth básico + frontend PWA (Fase 3)
@@ -193,7 +199,7 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 | **1** | 1 | Linux Fundamentals & Security Hardening | ✅ Done | [Ver](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/learning/phase1-week1-linux-fundamentals.md) |
 | **1** | 2 | AI Local Workflow & FastAPI Scaffold | ✅ Done | [Ver](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/learning/phase1-week2-opencode-fastapi.md) |
 | **1** | 3 | Pydantic Models & API Structure | ✅ Done | [Ver](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/learning/phase1-week3-pydantic-models.md) |
-| **1** | 3 | pytest + pre-commit | ⏳ Pending | — |
+| **1** | 3 | pytest + pre-commit | ✅ Done | [Ver](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/learning/phase1-week3-pytest-precommit.md) |
 | **1** | 4 | Docker Fundamentals & Containerization | ⏳ Pending | — |
 | **2** | 5–8 | IaC, MinIO Storage & HashiCorp Vault | ⏳ Planned | — |
 | **3** | 9–12 | Kubernetes (k3s) & Observability | ⏳ Planned | — |
@@ -203,12 +209,13 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 | Área | Documento | Descripción |
 | --- | --- | --- |
 | Git | [git-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/git-cheatsheet.md) | Commits, branching, remote sync & conventional patterns |
-| FastAPI + Pydantic + AI | [fastapi-ai-dev-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/fastapi-ai-dev-cheatsheet.md) | venv, uvicorn, Pydantic patterns, OpenCode prompts & project layout |
+| FastAPI + Pydantic + AI | [fastapi-ai-dev-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/fastapi-ai-dev-cheatsheet.md) | venv, uvicorn, Pydantic patterns & project layout |
+| pytest + pre-commit | [pytest-precommit-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/pytest-precommit-cheatsheet.md) | Testing patterns, fixtures, pre-commit hooks |
 | Architecture | [ADR Index](https://github.com/adriandelvalle/brewery-app/tree/main/docs/decisions) | Decision records |
 
 ---
 
-## Current Environment Status (Verified 2026-04-13)
+## Current Environment Status (Verified 2026-04-17)
 
 | Component | Configuration | Status |
 | --- | --- | --- |
@@ -219,7 +226,9 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 | **AI Tooling** | OpenCode CLI + OpenRouter (free tier) | ✅ Ready |
 | **Project Root** | `~/projects/brewery-app` | ✅ Structured |
 | **Python Env** | `backend/venv/` (FastAPI + Uvicorn + Pydantic v2) | ✅ Active |
-| **API** | 7 endpoints under `/api/v1/` | ✅ Running |
+| **API** | 7 endpoints under `/api/v1/` | ✅ Running (manual start) |
+| **Tests** | 14 tests — all passing | ✅ Green |
+| **pre-commit** | Active on brewery-app and portfolio | ✅ Active |
 
 ---
 
@@ -233,5 +242,5 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 
 ---
 
-> *Last updated: 2026-04-13*
+> *Last updated: 2026-04-17*
 > *Philosophy: Learning-first. 100% free stack. Depth > speed.*
