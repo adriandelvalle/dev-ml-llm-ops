@@ -43,12 +43,16 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
 | **Backend** | FastAPI + Uvicorn + Pydantic v2 | ✅ Implemented |
 | **API Models** | Pydantic v2 — Recipe, Batch, FermentationSample | ✅ Implemented |
 | **Testing** | pytest + httpx + pytest-asyncio (14 tests) | ✅ Implemented |
+| **Containerization** | Docker 29.5.2 + Dockerfile + .dockerignore | ✅ Implemented |
+| **Service Persistence** | Docker restart unless-stopped | ✅ Implemented |
 | **Secrets (pre-Vault)** | python-dotenv + `.env` (gitignored, 600) + `.env.example` | ⏳ Week 5 — see ADR-0004 |
 | **Database** | PostgreSQL + SQLAlchemy 2 (async) + Alembic | ⏳ Planned (Week 5) |
+| **Reverse Proxy** | Nginx | ⏳ Pending (Week 4 cont.) |
+| **External Access** | Cloudflare Tunnel | ⏳ Pending (Week 4 cont.) |
 | **Object Storage** | MinIO (S3-compatible API) | ⏳ Planned (Week 6) |
 | **Secrets Mgmt** | HashiCorp Vault + Vaultwarden | ⏳ Planned (Week 7) |
 | **Virtualization** | Proxmox VE | ⏳ Planned (Week 9) |
-| **Orchestration** | Docker Compose → k3s (Kubernetes) | ⏳ Planned (Weeks 4–9) |
+| **Orchestration** | Docker Compose → k3s (Kubernetes) | ⏳ Planned (Weeks 5–9) |
 | **CI/CD** | GitHub Actions | ⏳ Planned (Week 8) |
 | **Observability** | Prometheus + Grafana + Loki | ⏳ Planned (Week 11) |
 | **Security** | UFW, fail2ban, Trivy, Vault policies | 🔄 In Progress |
@@ -74,7 +78,7 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 - [x] VS Code Remote SSH workflow & port forwarding
 - [x] Portfolio & `brewery-app` repository structure
 
-### Phase 1: Foundations ✅ Completed (Week 3/4)
+### Phase 1: Foundations 🔄 In Progress (Week 4/4)
 
 - [x] Linux fundamentals: FHS, permissions, processes, networking
 - [x] Security baseline: `audit-permissions.sh`, UFW, fail2ban config
@@ -87,14 +91,14 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 - [x] Professional src structure: api/, models/, core/ (Week 3)
 - [x] pytest + httpx: 14 tests with fixtures and state isolation (Week 3)
 - [x] pre-commit + commitizen: enforced on both repos (Week 3)
-- [ ] Docker basics & containerization (Week 4)
+- [x] Docker: containerized API + Dockerfile + .dockerignore (Week 4)
+- [x] Service persistence: restart unless-stopped verified post-reboot (Week 4)
+- [x] requirements split: production vs development (Week 4)
+- [ ] Nginx reverse proxy (Week 4 continuation)
+- [ ] Cloudflare Tunnel + external access (Week 4 continuation)
+- [ ] Static files — Tres Tigris HTML content cards (Week 4 continuation)
 
-### Phase 2: IaC, Storage & Secrets ⏳ Planned (Weeks 4–8)
-
-**Week 4 — Docker**
-- [ ] Docker fundamentals: images, containers, layers, Dockerfile
-- [ ] Containerize FastAPI app
-- [ ] Service persistence via Docker restart policy
+### Phase 2: IaC, Storage & Secrets ⏳ Planned (Weeks 5–8)
 
 **Week 5 — Data Layer**
 - [ ] PostgreSQL setup + Docker Compose
@@ -148,7 +152,7 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 | Item | Accepted Until | Mitigation |
 | --- | --- | --- |
 | DB credentials in `.env` (plaintext) | Week 7 (Vault) | 600 permissions + gitignored + `.env.example` |
-| No service persistence (FastAPI not auto-starting) | Week 4 (Docker) | Manual start during dev — app not yet in production |
+| ~~No service persistence~~ | ~~Week 4~~ | ✅ Resolved — Docker unless-stopped |
 | No CI/CD gates on merges | Week 8 (GitHub Actions) | Feature branch habit from Week 3 |
 | Mock data in memory (no persistence) | Week 5 (PostgreSQL) | Acceptable for learning phase |
 
@@ -161,9 +165,6 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 - `fix/<n>`: bug fixes
 - `experiment/<n>`: throwaway spikes and model/infra experiments
 
-> Rationale: building the feature branch habit now means CI/CD in Week 8
-> is a natural extension, not a workflow change.
-
 ---
 
 ## Featured Project: brewery-app
@@ -172,7 +173,7 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 
 | Estado | Stack | Propósito |
 | --- | --- | --- |
-| 🔄 Fase 1 — Week 4 next | FastAPI + Pydantic + pytest, Docker (próximo) | Vehículo de aprendizaje para DevOps/MLOps/LLMOps |
+| 🔄 Fase 1 — Week 4 | FastAPI + Pydantic + pytest + Docker | Vehículo de aprendizaje para DevOps/MLOps/LLMOps |
 
 **Roadmap de features**:
 
@@ -180,7 +181,9 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 - [x] Recipe & Batch management API (mock data)
 - [x] pytest suite — 14 tests
 - [x] pre-commit + commitizen
-- [ ] Containerización Docker (Semana 4)
+- [x] Docker containerization + service persistence
+- [ ] Nginx + Cloudflare Tunnel (Semana 4 cont.)
+- [ ] Static files Tres Tigris (Semana 4 cont.)
 - [ ] Inventario con PostgreSQL (Semana 5)
 - [ ] Auth básico + frontend PWA (Fase 3)
 - [ ] Predicción de fermentación con ML (Fase 4)
@@ -200,7 +203,8 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 | **1** | 2 | AI Local Workflow & FastAPI Scaffold | ✅ Done | [Ver](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/learning/phase1-week2-opencode-fastapi.md) |
 | **1** | 3 | Pydantic Models & API Structure | ✅ Done | [Ver](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/learning/phase1-week3-pydantic-models.md) |
 | **1** | 3 | pytest + pre-commit | ✅ Done | [Ver](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/learning/phase1-week3-pytest-precommit.md) |
-| **1** | 4 | Docker Fundamentals & Containerization | ⏳ Pending | — |
+| **1** | 4 | Docker Fundamentals & Containerization | ✅ Done | [Ver](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/learning/phase1-week4-docker-fundamentals.md) |
+| **1** | 4 | Nginx + Cloudflare Tunnel | ⏳ Pending | — |
 | **2** | 5–8 | IaC, MinIO Storage & HashiCorp Vault | ⏳ Planned | — |
 | **3** | 9–12 | Kubernetes (k3s) & Observability | ⏳ Planned | — |
 
@@ -211,24 +215,24 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 | Git | [git-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/git-cheatsheet.md) | Commits, branching, remote sync & conventional patterns |
 | FastAPI + Pydantic + AI | [fastapi-ai-dev-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/fastapi-ai-dev-cheatsheet.md) | venv, uvicorn, Pydantic patterns & project layout |
 | pytest + pre-commit | [pytest-precommit-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/pytest-precommit-cheatsheet.md) | Testing patterns, fixtures, pre-commit hooks |
+| Docker | [docker-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/docker-cheatsheet.md) | Build, run, logs, debug, cleanup |
 | Architecture | [ADR Index](https://github.com/adriandelvalle/brewery-app/tree/main/docs/decisions) | Decision records |
 
 ---
 
-## Current Environment Status (Verified 2026-04-17)
+## Current Environment Status (Verified 2026-05-27)
 
 | Component | Configuration | Status |
 | --- | --- | --- |
 | **Host** | `jotasrv` (ACEMAGIC Mini PC) | ✅ Active |
+| **Kernel** | `6.8.0-117-generic` | ✅ Updated |
 | **Static IP** | `192.168.0.21/24` | ✅ Configured |
 | **SSH Access** | `ssh jota@jotasrv` | ✅ Working |
-| **SMB Mount** | `/mnt/Win_Projects` ← `//192.168.0.10/JotaSrv` | ✅ Mounted |
-| **AI Tooling** | OpenCode CLI + OpenRouter (free tier) | ✅ Ready |
-| **Project Root** | `~/projects/brewery-app` | ✅ Structured |
-| **Python Env** | `backend/venv/` (FastAPI + Uvicorn + Pydantic v2) | ✅ Active |
-| **API** | 7 endpoints under `/api/v1/` | ✅ Running (manual start) |
+| **Docker** | 29.5.2 (official repo) | ✅ Active |
+| **brewery-api** | brewery-app:v0.1, unless-stopped | ✅ Running |
 | **Tests** | 14 tests — all passing | ✅ Green |
 | **pre-commit** | Active on brewery-app and portfolio | ✅ Active |
+| **System updates** | 36 packages updated 2026-05-27 | ✅ Up to date |
 
 ---
 
@@ -239,8 +243,9 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 - [OpenCode Documentation](https://opencode.ai)
 - [Ollama](https://ollama.com)
 - [Conventional Commits](https://www.conventionalcommits.org/)
+- [AI Learning Roadmaps](https://github.com/bishwaghimire/ai-learning-roadmaps) — Reference for Phases 4–5
 
 ---
 
-> *Last updated: 2026-04-17*
+> *Last updated: 2026-05-27*
 > *Philosophy: Learning-first. 100% free stack. Depth > speed.*
