@@ -22,7 +22,7 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
 
 | Folder | Purpose |
 | --- | --- |
-| `projects/brewery-app/` | Core application: FastAPI backend, AI integration, infra configs & ADRs |
+| `projects/brewery-app/` | Core application: FastAPI backend, Nginx, AI integration, infra configs & ADRs |
 | `/projects/portfolio/docs/learning/` | Chronological learning notes (by phase/week) |
 | `/projects/portfolio/docs/reference/` | Reusable cheatsheets, architecture decisions & runbooks |
 | `/projects/portfolio/"sandbox-folders"/` | Isolated experiments: `devops/`, `mlops/`, `llmops/` |
@@ -45,16 +45,19 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
 | **Testing** | pytest + httpx + pytest-asyncio (14 tests) | ✅ Implemented |
 | **Containerization** | Docker 29.5.2 + Dockerfile + .dockerignore | ✅ Implemented |
 | **Service Persistence** | Docker restart unless-stopped | ✅ Implemented |
+| **Docker Networks** | brewery-network (API ↔ Nginx ↔ Cloudflared) | ✅ Implemented |
+| **Reverse Proxy** | Nginx (alpine) | ✅ Implemented |
+| **Static File Serving** | Volume-mounted, instant updates | ✅ Implemented |
+| **External Access** | Cloudflare Tunnel (quick tunnel, free) | ✅ Implemented |
 | **Secrets (pre-Vault)** | python-dotenv + `.env` (gitignored, 600) + `.env.example` | ⏳ Week 5 — see ADR-0004 |
 | **Database** | PostgreSQL + SQLAlchemy 2 (async) + Alembic | ⏳ Planned (Week 5) |
-| **Reverse Proxy** | Nginx | ⏳ Pending (Week 4 cont.) |
-| **External Access** | Cloudflare Tunnel | ⏳ Pending (Week 4 cont.) |
 | **Object Storage** | MinIO (S3-compatible API) | ⏳ Planned (Week 6) |
 | **Secrets Mgmt** | HashiCorp Vault + Vaultwarden | ⏳ Planned (Week 7) |
 | **Virtualization** | Proxmox VE | ⏳ Planned (Week 9) |
 | **Orchestration** | Docker Compose → k3s (Kubernetes) | ⏳ Planned (Weeks 5–9) |
 | **CI/CD** | GitHub Actions | ⏳ Planned (Week 8) |
 | **Observability** | Prometheus + Grafana + Loki | ⏳ Planned (Week 11) |
+| **Custom Domain** | trestigris.beer (Cloudflare) | ⏳ Deferred — until real content exists |
 | **Security** | UFW, fail2ban, Trivy, Vault policies | 🔄 In Progress |
 
 ---
@@ -78,7 +81,7 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 - [x] VS Code Remote SSH workflow & port forwarding
 - [x] Portfolio & `brewery-app` repository structure
 
-### Phase 1: Foundations 🔄 In Progress (Week 4/4)
+### Phase 1: Foundations ✅ Completed (Week 4/4)
 
 - [x] Linux fundamentals: FHS, permissions, processes, networking
 - [x] Security baseline: `audit-permissions.sh`, UFW, fail2ban config
@@ -94,9 +97,11 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 - [x] Docker: containerized API + Dockerfile + .dockerignore (Week 4)
 - [x] Service persistence: restart unless-stopped verified post-reboot (Week 4)
 - [x] requirements split: production vs development (Week 4)
-- [ ] Nginx reverse proxy (Week 4 continuation)
-- [ ] Cloudflare Tunnel + external access (Week 4 continuation)
-- [ ] Static files — Tres Tigris HTML content cards (Week 4 continuation)
+- [x] Docker networks: brewery-network connecting containers (Week 4)
+- [x] Nginx reverse proxy + static file serving (Week 4)
+- [x] Cloudflare Tunnel: external HTTPS access without port forwarding (Week 4)
+- [x] UTF-8 encoding bug fixed (HTML + Nginx charset) (Week 4)
+- [x] Static IP fixed on Windows after DHCP change detected (Week 4)
 
 ### Phase 2: IaC, Storage & Secrets ⏳ Planned (Weeks 5–8)
 
@@ -105,6 +110,7 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 - [ ] SQLAlchemy 2 async models
 - [ ] Alembic: first migration
 - [ ] python-dotenv + `.env.example` — pre-Vault secrets pattern (ADR-0004)
+- [ ] Member (`Socio`) model — RGPD-compliant fields, quota type, renewal logic
 
 **Week 6 — Storage**
 - [ ] Docker Compose: multi-service orchestration (API + DB + MinIO)
@@ -125,6 +131,8 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 - [ ] Helm charts & GitOps basics
 - [ ] Observability stack: Prometheus + Grafana dashboards
 - [ ] Backup & DR: MinIO replication + Vault snapshots
+- [ ] Admin panel with login (JPG export, member management)
+- [ ] Member area with login (membership status, batch history)
 
 ### Phase 4: MLOps Fundamentals ⏳ Planned
 
@@ -155,6 +163,8 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 | ~~No service persistence~~ | ~~Week 4~~ | ✅ Resolved — Docker unless-stopped |
 | No CI/CD gates on merges | Week 8 (GitHub Actions) | Feature branch habit from Week 3 |
 | Mock data in memory (no persistence) | Week 5 (PostgreSQL) | Acceptable for learning phase |
+| Cloudflare Tunnel subdomain is temporary/random | Until `trestigris.beer` purchased | Re-check `docker logs brewery-cloudflared` after restarts |
+| Router has no DHCP Reservation (Sercom firmware) | N/A | Static IP configured manually in Windows instead |
 
 ---
 
@@ -173,7 +183,7 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 
 | Estado | Stack | Propósito |
 | --- | --- | --- |
-| 🔄 Fase 1 — Week 4 | FastAPI + Pydantic + pytest + Docker | Vehículo de aprendizaje para DevOps/MLOps/LLMOps |
+| ✅ Fase 1 completa | FastAPI + Pydantic + pytest + Docker + Nginx + Cloudflare Tunnel | Vehículo de aprendizaje para DevOps/MLOps/LLMOps |
 
 **Roadmap de features**:
 
@@ -182,13 +192,16 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 - [x] pytest suite — 14 tests
 - [x] pre-commit + commitizen
 - [x] Docker containerization + service persistence
-- [ ] Nginx + Cloudflare Tunnel (Semana 4 cont.)
-- [ ] Static files Tres Tigris (Semana 4 cont.)
+- [x] Nginx reverse proxy + static files
+- [x] Cloudflare Tunnel — acceso público sin exponer IP doméstica
 - [ ] Inventario con PostgreSQL (Semana 5)
-- [ ] Auth básico + frontend PWA (Fase 3)
+- [ ] Formulario de registro de socios — RGPD, tipo de cuota, renovación (Semana 5)
+- [ ] Panel admin con login (Fase 3)
+- [ ] Área de socios con login (Fase 3)
 - [ ] Predicción de fermentación con ML (Fase 4)
 - [ ] Asistente de calendario con RAG + Agentes (Fase 5)
 - [ ] Production hardening + beta cerrada (Fase 6)
+- [ ] Dominio propio trestigris.beer (cuando haya contenido real)
 
 ---
 
@@ -204,7 +217,7 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 | **1** | 3 | Pydantic Models & API Structure | ✅ Done | [Ver](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/learning/phase1-week3-pydantic-models.md) |
 | **1** | 3 | pytest + pre-commit | ✅ Done | [Ver](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/learning/phase1-week3-pytest-precommit.md) |
 | **1** | 4 | Docker Fundamentals & Containerization | ✅ Done | [Ver](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/learning/phase1-week4-docker-fundamentals.md) |
-| **1** | 4 | Nginx + Cloudflare Tunnel | ⏳ Pending | — |
+| **1** | 4 | Nginx, Docker Networks & Cloudflare Tunnel | ✅ Done | [Ver](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/learning/phase1-week4-nginx-docker-networks-cloudflare.md) |
 | **2** | 5–8 | IaC, MinIO Storage & HashiCorp Vault | ⏳ Planned | — |
 | **3** | 9–12 | Kubernetes (k3s) & Observability | ⏳ Planned | — |
 
@@ -216,23 +229,27 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 | FastAPI + Pydantic + AI | [fastapi-ai-dev-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/fastapi-ai-dev-cheatsheet.md) | venv, uvicorn, Pydantic patterns & project layout |
 | pytest + pre-commit | [pytest-precommit-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/pytest-precommit-cheatsheet.md) | Testing patterns, fixtures, pre-commit hooks |
 | Docker | [docker-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/docker-cheatsheet.md) | Build, run, logs, debug, cleanup |
+| Nginx + Networks + Cloudflare | [nginx-docker-networks-cloudflare-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/nginx-docker-networks-cloudflare-cheatsheet.md) | Reverse proxy, volumes, tunnel, troubleshooting |
 | Architecture | [ADR Index](https://github.com/adriandelvalle/brewery-app/tree/main/docs/decisions) | Decision records |
 
 ---
 
-## Current Environment Status (Verified 2026-05-27)
+## Current Environment Status (Verified 2026-06-19)
 
 | Component | Configuration | Status |
 | --- | --- | --- |
 | **Host** | `jotasrv` (ACEMAGIC Mini PC) | ✅ Active |
 | **Kernel** | `6.8.0-117-generic` | ✅ Updated |
-| **Static IP** | `192.168.0.21/24` | ✅ Configured |
+| **Static IP (jotasrv)** | `192.168.0.21/24` | ✅ Configured |
+| **Static IP (Windows)** | `192.168.0.15` (fixed manually, router lacks DHCP reservation) | ✅ Configured |
 | **SSH Access** | `ssh jota@jotasrv` | ✅ Working |
 | **Docker** | 29.5.2 (official repo) | ✅ Active |
 | **brewery-api** | brewery-app:v0.1, unless-stopped | ✅ Running |
+| **brewery-nginx** | brewery-nginx:v0.2, unless-stopped | ✅ Running |
+| **brewery-cloudflared** | quick tunnel, unless-stopped | ✅ Running |
+| **External access** | via Cloudflare Tunnel (random subdomain) | ✅ Verified from mobile data |
 | **Tests** | 14 tests — all passing | ✅ Green |
 | **pre-commit** | Active on brewery-app and portfolio | ✅ Active |
-| **System updates** | 36 packages updated 2026-05-27 | ✅ Up to date |
 
 ---
 
@@ -247,5 +264,5 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 
 ---
 
-> *Last updated: 2026-05-27*
+> *Last updated: 2026-06-19*
 > *Philosophy: Learning-first. 100% free stack. Depth > speed.*
