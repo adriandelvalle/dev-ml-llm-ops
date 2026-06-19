@@ -229,7 +229,9 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 | FastAPI + Pydantic + AI | [fastapi-ai-dev-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/fastapi-ai-dev-cheatsheet.md) | venv, uvicorn, Pydantic patterns & project layout |
 | pytest + pre-commit | [pytest-precommit-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/pytest-precommit-cheatsheet.md) | Testing patterns, fixtures, pre-commit hooks |
 | Docker | [docker-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/docker-cheatsheet.md) | Build, run, logs, debug, cleanup |
-| Nginx + Networks + Cloudflare | [nginx-docker-networks-cloudflare-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/nginx-docker-networks-cloudflare-cheatsheet.md) | Reverse proxy, volumes, tunnel, troubleshooting |
+| Docker Networks & Volumes | [docker-networks-volumes-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/docker-networks-volumes-cheatsheet.md) | Redes, resolución de nombres, bind mounts, named volumes |
+| Nginx | [nginx-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/nginx-cheatsheet.md) | Reverse proxy, web server, configuración |
+| Cloudflare Tunnel | [cloudflare-tunnel-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/cloudflare-tunnel-cheatsheet.md) | Quick tunnel, túnel con nombre, troubleshooting |
 | Architecture | [ADR Index](https://github.com/adriandelvalle/brewery-app/tree/main/docs/decisions) | Decision records |
 
 ---
