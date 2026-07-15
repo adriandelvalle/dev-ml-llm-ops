@@ -43,21 +43,25 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
 | **Backend** | FastAPI + Uvicorn + Pydantic v2 | ✅ Implemented |
 | **API Models** | Pydantic v2 — Recipe, Batch, FermentationSample | ✅ Implemented |
 | **Testing** | pytest + httpx + pytest-asyncio (14 tests) | ✅ Implemented |
-| **Containerization** | Docker 29.5.2 + Dockerfile + .dockerignore | ✅ Implemented |
+| **Containerization** | Docker + Docker Compose | ✅ Implemented |
 | **Service Persistence** | Docker restart unless-stopped | ✅ Implemented |
-| **Docker Networks** | brewery-network (API ↔ Nginx ↔ Cloudflared) | ✅ Implemented |
+| **Docker Networks** | brewery-network (API ↔ Nginx ↔ Cloudflared ↔ DB) | ✅ Implemented |
 | **Reverse Proxy** | Nginx (alpine) | ✅ Implemented |
 | **Static File Serving** | Volume-mounted, instant updates | ✅ Implemented |
 | **External Access** | Cloudflare Tunnel (quick tunnel, free) | ✅ Implemented |
-| **Secrets (pre-Vault)** | python-dotenv + `.env` (gitignored, 600) + `.env.example` | ⏳ Week 5 — see ADR-0004 |
-| **Database** | PostgreSQL + SQLAlchemy 2 (async) + Alembic | ⏳ Planned (Week 5) |
+| **Database** | PostgreSQL 16 | ✅ Running |
+| **ORM** | SQLAlchemy 2 (async) | ✅ Implemented |
+| **Migrations** | Alembic | ✅ Implemented |
+| **Secrets (pre-Vault)** | python-dotenv + `.env` (gitignored) + `.env.example` | ✅ Implemented — see ADR-0004 |
 | **Object Storage** | MinIO (S3-compatible API) | ⏳ Planned (Week 6) |
 | **Secrets Mgmt** | HashiCorp Vault + Vaultwarden | ⏳ Planned (Week 7) |
 | **Virtualization** | Proxmox VE | ⏳ Planned (Week 9) |
 | **Orchestration** | Docker Compose → k3s (Kubernetes) | ⏳ Planned (Weeks 5–9) |
 | **CI/CD** | GitHub Actions | ⏳ Planned (Week 8) |
 | **Observability** | Prometheus + Grafana + Loki | ⏳ Planned (Week 11) |
-| **Custom Domain** | trestigris.beer (Cloudflare) | ⏳ Deferred — until real content exists |
+| **Custom Domain** | trestigris.com | ⏳ Deferred — until real content exists |
+| **KB Tres Tigris** | Syncthing + jotasrv + Obsidian | ⏳ Deferred — post-dominio |
+| **Email** | Zoho Mail Lite + Thunderbird | ⏳ Pendiente decisión |
 | **Security** | UFW, fail2ban, Trivy, Vault policies | 🔄 In Progress |
 
 ---
@@ -102,22 +106,29 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 - [x] Cloudflare Tunnel: external HTTPS access without port forwarding (Week 4)
 - [x] UTF-8 encoding bug fixed (HTML + Nginx charset) (Week 4)
 - [x] Static IP fixed on Windows after DHCP change detected (Week 4)
+- [x] Netplan/cloud-init conflict resolved on jotasrv (Week 4)
 
-### Phase 2: IaC, Storage & Secrets ⏳ Planned (Weeks 5–8)
+### Phase 2: IaC, Storage & Secrets 🔄 In Progress (Weeks 5–8)
 
 **Week 5 — Data Layer**
-- [ ] PostgreSQL setup + Docker Compose
-- [ ] SQLAlchemy 2 async models
-- [ ] Alembic: first migration
-- [ ] python-dotenv + `.env.example` — pre-Vault secrets pattern (ADR-0004)
-- [ ] Member (`Socio`) model — RGPD-compliant fields, quota type, renewal logic
+- [x] PostgreSQL 16 in Docker with persistent named volume
+- [x] SQL fundamentals with psql: tables, foreign keys, integrity, sequences, UTC
+- [x] Docker Compose: full stack in single declarative file
+- [x] container_name: fixed names, no prefix/suffix
+- [x] .env + .env.example: pre-Vault credentials pattern
+- [x] SQLAlchemy 2: Recipe and Batch models defined with relationships
+- [x] Alembic: env.py configured async, first migration applied
+- [ ] Connect FastAPI endpoints to PostgreSQL (replace mock_data)
+- [ ] FermentationSample SQLAlchemy model + migration
+- [ ] Socio model: RGPD fields, quota type, renewal logic
+- [ ] pytest with real DB (replace mock_data fixtures)
 
 **Week 6 — Storage**
-- [ ] Docker Compose: multi-service orchestration (API + DB + MinIO)
-- [ ] MinIO setup: S3-compatible storage for models & artifacts
+- [ ] Docker Compose: add MinIO service
+- [ ] MinIO: S3-compatible storage for models & artifacts
 
 **Week 7 — Secrets**
-- [ ] HashiCorp Vault: secrets management & dynamic DB credentials
+- [ ] HashiCorp Vault: dynamic DB credentials
 - [ ] Migrate `DATABASE_URL` from `.env` to Vault (see ADR-0004)
 
 **Week 8 — CI/CD**
@@ -162,8 +173,8 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 | DB credentials in `.env` (plaintext) | Week 7 (Vault) | 600 permissions + gitignored + `.env.example` |
 | ~~No service persistence~~ | ~~Week 4~~ | ✅ Resolved — Docker unless-stopped |
 | No CI/CD gates on merges | Week 8 (GitHub Actions) | Feature branch habit from Week 3 |
-| Mock data in memory (no persistence) | Week 5 (PostgreSQL) | Acceptable for learning phase |
-| Cloudflare Tunnel subdomain is temporary/random | Until `trestigris.beer` purchased | Re-check `docker logs brewery-cloudflared` after restarts |
+| API still using mock_data | Next session | PostgreSQL + Alembic ready, pending connection |
+| Cloudflare Tunnel subdomain is temporary/random | Until `trestigris.com` purchased | Re-check `docker logs brewery-cloudflared` after restarts |
 | Router has no DHCP Reservation (Sercom firmware) | N/A | Static IP configured manually in Windows instead |
 
 ---
@@ -177,13 +188,27 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 
 ---
 
+## Decisions Log
+
+| Decision | Result |
+| --- | --- |
+| Domain TLD | `.com` — more recognizable for general public |
+| GitHub Pages | Discarded — static only, can't serve the API |
+| Email | Zoho Mail Lite + Thunderbird — pending activation |
+| KB Tres Tigris | Syncthing + jotasrv + Obsidian — pending domain |
+| ELK stack | Sandbox `devops/` only — not in production |
+| Authentication | Simple `users` table in PostgreSQL + bcrypt — no LDAP needed at this scale |
+| Soft delete | Planned — mark inactive instead of hard delete to preserve business history |
+
+---
+
 ## Featured Project: brewery-app
 
 **Gestión de cervecería artesana con IA** → [Ver repo](https://github.com/adriandelvalle/brewery-app)
 
 | Estado | Stack | Propósito |
 | --- | --- | --- |
-| ✅ Fase 1 completa | FastAPI + Pydantic + pytest + Docker + Nginx + Cloudflare Tunnel | Vehículo de aprendizaje para DevOps/MLOps/LLMOps |
+| 🔄 Fase 2 (Week 5) | FastAPI + Pydantic + pytest + Docker Compose + Nginx + Cloudflare + PostgreSQL + SQLAlchemy + Alembic | Vehículo de aprendizaje para DevOps/MLOps/LLMOps |
 
 **Roadmap de features**:
 
@@ -191,17 +216,18 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 - [x] Recipe & Batch management API (mock data)
 - [x] pytest suite — 14 tests
 - [x] pre-commit + commitizen
-- [x] Docker containerization + service persistence
+- [x] Docker Compose — full stack
 - [x] Nginx reverse proxy + static files
 - [x] Cloudflare Tunnel — acceso público sin exponer IP doméstica
-- [ ] Inventario con PostgreSQL (Semana 5)
-- [ ] Formulario de registro de socios — RGPD, tipo de cuota, renovación (Semana 5)
+- [x] PostgreSQL + SQLAlchemy + Alembic — esquema creado
+- [ ] Conectar API a PostgreSQL (siguiente sesión)
+- [ ] Formulario de registro de socios — RGPD, tipo de cuota, renovación
 - [ ] Panel admin con login (Fase 3)
 - [ ] Área de socios con login (Fase 3)
 - [ ] Predicción de fermentación con ML (Fase 4)
 - [ ] Asistente de calendario con RAG + Agentes (Fase 5)
 - [ ] Production hardening + beta cerrada (Fase 6)
-- [ ] Dominio propio trestigris.beer (cuando haya contenido real)
+- [ ] Dominio propio trestigris.com (cuando haya contenido real)
 
 ---
 
@@ -218,7 +244,9 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 | **1** | 3 | pytest + pre-commit | ✅ Done | [Ver](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/learning/phase1-week3-pytest-precommit.md) |
 | **1** | 4 | Docker Fundamentals & Containerization | ✅ Done | [Ver](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/learning/phase1-week4-docker-fundamentals.md) |
 | **1** | 4 | Nginx, Docker Networks & Cloudflare Tunnel | ✅ Done | [Ver](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/learning/phase1-week4-nginx-docker-networks-cloudflare.md) |
-| **2** | 5–8 | IaC, MinIO Storage & HashiCorp Vault | ⏳ Planned | — |
+| **2** | 5 | PostgreSQL + Docker Compose + SQLAlchemy + Alembic | ✅ Done | [Ver](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/learning/phase2-week5-postgresql-sqlalchemy-alembic.md) |
+| **2** | 5 | Connect API to PostgreSQL | ⏳ Pending | — |
+| **2** | 6–8 | MinIO, Vault, GitHub Actions | ⏳ Planned | — |
 | **3** | 9–12 | Kubernetes (k3s) & Observability | ⏳ Planned | — |
 
 ### Reference Cheatsheets & Docs
@@ -230,26 +258,28 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 | pytest + pre-commit | [pytest-precommit-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/pytest-precommit-cheatsheet.md) | Testing patterns, fixtures, pre-commit hooks |
 | Docker | [docker-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/docker-cheatsheet.md) | Build, run, logs, debug, cleanup |
 | Docker Networks & Volumes | [docker-networks-volumes-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/docker-networks-volumes-cheatsheet.md) | Redes, resolución de nombres, bind mounts, named volumes |
+| Docker Compose | [docker-compose-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/docker-compose-cheatsheet.md) | Stack declarativo, .env, depends_on, build vs image |
 | Nginx | [nginx-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/nginx-cheatsheet.md) | Reverse proxy, web server, configuración |
 | Cloudflare Tunnel | [cloudflare-tunnel-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/cloudflare-tunnel-cheatsheet.md) | Quick tunnel, túnel con nombre, troubleshooting |
+| PostgreSQL & SQL | [postgresql-sql-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/postgresql-sql-cheatsheet.md) | SQL puro, tipos, foreign keys, integridad, UTC |
+| SQLAlchemy | [sqlalchemy-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/sqlalchemy-cheatsheet.md) | ORM, modelos, relationships, session, CRUD async |
+| Alembic | [alembic-cheatsheet.md](https://github.com/adriandelvalle/dev-ml-llm-ops/blob/main/docs/reference/alembic-cheatsheet.md) | Migraciones, autogenerate, upgrade, downgrade |
 | Architecture | [ADR Index](https://github.com/adriandelvalle/brewery-app/tree/main/docs/decisions) | Decision records |
 
 ---
 
-## Current Environment Status (Verified 2026-06-19)
+## Current Environment Status (Verified 2026-07-15)
 
 | Component | Configuration | Status |
 | --- | --- | --- |
 | **Host** | `jotasrv` (ACEMAGIC Mini PC) | ✅ Active |
 | **Kernel** | `6.8.0-117-generic` | ✅ Updated |
+| **Network config** | Netplan only (cloud-init disabled) | ✅ Fixed |
 | **Static IP (jotasrv)** | `192.168.0.21/24` | ✅ Configured |
 | **Static IP (Windows)** | `192.168.0.15` (fixed manually, router lacks DHCP reservation) | ✅ Configured |
 | **SSH Access** | `ssh jota@jotasrv` | ✅ Working |
-| **Docker** | 29.5.2 (official repo) | ✅ Active |
-| **brewery-api** | brewery-app:v0.1, unless-stopped | ✅ Running |
-| **brewery-nginx** | brewery-nginx:v0.2, unless-stopped | ✅ Running |
-| **brewery-cloudflared** | quick tunnel, unless-stopped | ✅ Running |
-| **External access** | via Cloudflare Tunnel (random subdomain) | ✅ Verified from mobile data |
+| **Docker Compose** | All 4 services running | ✅ Active |
+| **PostgreSQL** | brewery-db, tables: recipes, batches, alembic_version | ✅ Running |
 | **Tests** | 14 tests — all passing | ✅ Green |
 | **pre-commit** | Active on brewery-app and portfolio | ✅ Active |
 
@@ -266,5 +296,5 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 
 ---
 
-> *Last updated: 2026-06-19*
+> *Last updated: 2026-07-15*
 > *Philosophy: Learning-first. 100% free stack. Depth > speed.*
