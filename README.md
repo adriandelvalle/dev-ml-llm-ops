@@ -8,7 +8,7 @@
 
 - **GitHub**: [adriandelvalle](https://github.com/adriandelvalle)
 - **Email**: [adriandelvallecv@gmail.com](mailto:adriandelvallecv@gmail.com)
-- **Focus**: DevOps infrastructure, MLOps pipelines, LLMOps local deployment
+- **Focus**: DevOps infrastructure, MLOps pipelines, LLMOps and AI-assisted engineering
 
 ---
 
@@ -39,7 +39,7 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
 | **OS / Access** | Ubuntu 24.04 LTS + VS Code Remote SSH / mRemoteNG | ✅ Active |
 | **Version Control** | Git + GitHub (SSH) + Conventional Commits | ✅ Active |
 | **Code Quality** | pre-commit + commitizen (both repos) | ✅ Active |
-| **AI Coding** | OpenCode CLI (OpenRouter free tier) + Ollama (local, batch/experiments) | ✅ Hybrid — see ADR-0003 |
+| **AI Coding** | ChatGPT and OpenCode with online models; Ollama local experiments | ✅ Cloud-first — see ADR-0003 |
 | **Backend** | FastAPI + Uvicorn + Pydantic v2 | ✅ Implemented |
 | **API Models** | Pydantic v2 — Recipe, Batch, FermentationSample | ✅ Implemented |
 | **Testing** | pytest + httpx + pytest-asyncio (14 tests) | ✅ Implemented |
@@ -66,12 +66,35 @@ Learn and document the deployment of local AI infrastructure, applying DevOps be
 
 ---
 
+## AI-Assisted Engineering Strategy
+
+AI is used as an engineering assistant layered on top of manually understood
+DevOps, MLOps and LLMOps practices. The learning sequence is: perform the task
+manually, automate it deterministically, then delegate bounded parts to an AI
+agent with tests, human review, least-privilege access and an auditable Git
+workflow.
+
+The current interactive workflow uses online models, primarily ChatGPT, because
+local inference is not yet viable on the available hardware. OpenCode is kept as
+the agentic CLI/workflow layer and may use online models. Ollama remains a
+future experimental option for batch jobs, local evaluation and MLOps/LLMOps
+experiments when the hardware or model economics make it practical.
+
+This transversal track will cover:
+
+- AI-assisted Dockerfile, Compose, Terraform and Ansible generation and review
+- AI support for CI failures, tests, documentation and incident analysis
+- Branches, commits and pull requests created by agents under human approval
+- Secure tool permissions, secret isolation, sandboxing and audit trails
+- Evaluation of generated changes for correctness, security, cost and operability
+- Human-in-the-loop deployment gates through GitHub Actions and Coolify
+
 ## Local AI Infrastructure Notes
 
 The ACEMAGIC's Radeon 680M (iGPU) shares memory bandwidth with the system (~50 GB/s
 vs ~360 GB/s on a dedicated GPU). Tested inference with `qwen2.5-coder:7b` —
 2–4 tok/s, 30–50s latency, 8 cores saturated. **Decision**: cloud-first for
-interactive development, Ollama reserved for batch/MLOps experiments.
+interactive development, Ollama reserved for future batch/MLOps experiments.
 See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/decisions/0001-ai-tooling-and-local-llm-strategy.md) (superseded) and [ADR-0003](https://github.com/adriandelvalle/brewery-app/blob/main/docs/decisions/0003-ai-strategy.md).
 
 ---
@@ -89,7 +112,8 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 
 - [x] Linux fundamentals: FHS, permissions, processes, networking
 - [x] Security baseline: `audit-permissions.sh`, UFW, fail2ban config
-- [x] AI Local Workflow: OpenCode CLI + Ollama (→ migrated to cloud, ADR-0003)
+- [x] AI-Assisted Development Workflow: ChatGPT + OpenCode with online models
+- [ ] Agentic DevOps workflow: AI-generated changes reviewed through Git, CI and deployment gates
 - [x] Backend Scaffold: FastAPI `/health` endpoint + Swagger UI
 - [x] Python Environment: `venv` isolation + PEP 668 compliance
 - [x] Documentation: ADR-0001 (superseded), ADR-0002, ADR-0003, ADR-0004
@@ -134,6 +158,15 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 **Week 8 — CI/CD**
 - [ ] GitHub Actions pipeline: lint, test, build, push
 - [ ] PR-based workflow (feature branches → CI gates)
+- [ ] Coolify deployment: push/webhook and CI-driven image deployment
+
+**Cross-cutting track — AI-Assisted DevOps**
+- [ ] Perform each workflow manually before delegating it to an AI agent
+- [ ] Generate and review Dockerfiles, Compose files, Terraform and Ansible with AI assistance
+- [ ] Agent creates branch/commit/PR; CI remains an independent validation gate
+- [ ] Human approval before merge and deployment; document permissions and audit trail
+- [ ] Evaluate agent output for correctness, security, cost and operability
+- [ ] Compare online-model workflow with future local-model experiments
 
 ### Phase 3: Orchestration & Observability ⏳ Planned (Weeks 9–12)
 
@@ -161,6 +194,7 @@ See [ADR-0001](https://github.com/adriandelvalle/brewery-app/blob/main/docs/deci
 ### Phase 6: Integration & Production Readiness ⏳ Planned
 
 - [ ] `brewery-app` v1.0: full stack deployment on k3s
+- [ ] Terraform + Ansible + Coolify + GitHub Actions end-to-end delivery workflow
 - [ ] Security hardening, load testing & documentation
 - [ ] Portfolio polish: live demo, case study & LinkedIn article
 
